@@ -93,3 +93,32 @@ if (UNIX)
 endif() # UNIX
 
 # -----------------------------------------------------------------
+
+if (WIN32)
+  
+  # TEST CASE "B"
+  if (TRUE)
+
+    # You can use `lib /list core.lib` to check if the file is
+    # either an static or import lib.  When it's a static lib,
+    # you'll see a list of included .obj files.
+    # See https://gist.github.com/roxlu/d94932dcbf4b9183718810ab4054a20e
+    # for the difference.
+
+    # Shared core, run-time linkage module
+    add_library(core STATIC ${src_dir}/log.c ${src_dir}/loader.c)
+    install(TARGETS core DESTINATION bin)
+
+    add_library(encoder MODULE ${src_dir}/module/encoder.c)
+    install(TARGETS encoder DESTINATION lib)
+    
+    # Create the target.
+    add_executable(test-b ${src_dir}/test/test-b.c)
+    target_link_libraries(test-b core)
+    install(TARGETS test-b DESTINATION bin)
+
+  endif()
+
+endif()
+
+# -----------------------------------------------------------------
